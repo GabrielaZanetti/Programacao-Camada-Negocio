@@ -31,7 +31,9 @@ public class Main {
        // Busca apenas um id
        // System.out.println(getByID(1));
        
-       /* Deletar um item */
+       /* Deletar um item 
+            Delet(1);
+       */
     }
 
     public static void insert(Client client) {
@@ -101,24 +103,43 @@ public class Main {
     }
     
     public static Client Delet(int id) {
-        Client client = new Client();
-        String sql = "Select * FROM CLIENTES WHERE id = ?";
+        Client client = null;
+        String selectSql = "SELECT * FROM CLIENTES WHERE id = ?";
+        String deleteSql = "DELETE FROM CLIENTES WHERE id = ?";
 
-        try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
-             PreparedStatement select_clients = connection.prepareStatement(sql);) {
-            select_clients.setInt(1, id);
-            ResultSet result = select_clients.executeQuery();
-            if (result.next()) {
-                client.setId(result.getInt("id"));
-                client.setName(result.getString("nome"));
-                client.setPhone(result.getString("telefone"));
-                client.setAddress(result.getString("endereco"));
-                client.setEmail(result.getString("email"));
-            }   
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD)) {
+            try (PreparedStatement selectStmt = connection.prepareStatement(selectSql)) {
+                selectStmt.setInt(1, id);
+                ResultSet result = selectStmt.executeQuery();
+
+                if (result.next()) {
+                    client = new Client();
+                    client.setId(result.getInt("id"));
+                    client.setName(result.getString("nome"));
+                    client.setPhone(result.getString("telefone"));
+                    client.setAddress(result.getString("endereco"));
+                    client.setEmail(result.getString("email"));
+                } else {
+                    System.out.println("Cliente com ID " + id + " nao encontrado.");
+                    return null;
+                }
+            }
+            try (PreparedStatement deleteStmt = connection.prepareStatement(deleteSql)) {
+                deleteStmt.setInt(1, id);
+                int rowsAffected = deleteStmt.executeUpdate();
+
+                if (rowsAffected > 0) {
+                    System.out.println("Cliente " + client.getName() + " deletado com sucesso.");
+                } else {
+                    System.out.println("Nenhum cliente foi deletado.");
+                }
+            }
+
         } catch (SQLException ex) {
-            System.out.println("erro: " + ex.getMessage());
+            System.out.println("Erro ao deletar cliente: " + ex.getMessage());
         }
-        
+
         return client;
     }
+
 }
