@@ -35,6 +35,7 @@ public class Main {
             Delet(1);
        */
        
+       /* Alterar um item 
        Client clienteAtualizado = new Client();
 
         clienteAtualizado.setId(2);
@@ -49,6 +50,7 @@ public class Main {
         } else {
             System.out.println("Falha ao atualizar o cliente.");
         }
+        */
     }
 
     public static void insert(Client client) {
