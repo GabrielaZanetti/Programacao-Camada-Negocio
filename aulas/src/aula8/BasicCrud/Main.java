@@ -34,6 +34,21 @@ public class Main {
        /* Deletar um item 
             Delet(1);
        */
+       
+       Client clienteAtualizado = new Client();
+
+        clienteAtualizado.setId(2);
+        clienteAtualizado.setName("Maria Silva");
+        clienteAtualizado.setAddress("Rua Nova, 123");
+        clienteAtualizado.setEmail("maria.teste@example.com");
+
+        boolean sucesso = Update(clienteAtualizado);
+
+        if (sucesso) {
+            System.out.println("Atualizacao realizada com sucesso.");
+        } else {
+            System.out.println("Falha ao atualizar o cliente.");
+        }
     }
 
     public static void insert(Client client) {
@@ -142,4 +157,31 @@ public class Main {
         return client;
     }
 
+    public static boolean Update(Client client) {
+        String updateSql = "UPDATE CLIENTES SET nome = ?, telefone = ?, endereco = ?, email = ? WHERE id = ?";
+
+        try (Connection connection = DriverManager.getConnection(DATABASE_URL, USER, PASSWORD);
+             PreparedStatement updateStmt = connection.prepareStatement(updateSql)) {
+
+            updateStmt.setString(1, client.getName());
+            updateStmt.setString(2, client.getPhone());
+            updateStmt.setString(3, client.getAddress());
+            updateStmt.setString(4, client.getEmail());
+            updateStmt.setInt(5, client.getId());
+
+            int rowsAffected = updateStmt.executeUpdate();
+
+            if (rowsAffected > 0) {
+                System.out.println("Cliente " + client.getName() + " atualizado com sucesso.");
+                return true;
+            } else {
+                System.out.println("Nenhum cliente foi atualizado. Verifique o ID.");
+                return false;
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Erro ao atualizar cliente: " + ex.getMessage());
+            return false;
+        }
+    }
 }
