@@ -1,4 +1,4 @@
-package unidade01.aula05.t06static.e01estaticattribute;
+package aula5.t06static.e01estaticattribute;
 
 /**
  *

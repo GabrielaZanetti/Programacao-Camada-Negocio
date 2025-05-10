@@ -1,9 +1,9 @@
-package unidade01.aula05.t05enumeration.e01enumsimple;
+package aula5.t05enumeration.e01enumsimple;
 
 import java.time.LocalTime;
 
 /**
- * @author Eldair F. Dornelles
+ * @author gabriela.zanetti
  */
 public class Appointment {
 

@@ -1,4 +1,4 @@
-package unidade01.aula04.t04varargs.e01varargscontext;
+package aula4.t04varargs.e01varargscontext;
 
 /**
  * <b>Unijuí</b><br>

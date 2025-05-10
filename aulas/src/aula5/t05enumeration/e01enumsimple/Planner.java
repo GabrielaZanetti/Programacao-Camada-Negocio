@@ -1,7 +1,7 @@
-package unidade01.aula05.t05enumeration.e01enumsimple;
+package aula5.t05enumeration.e01enumsimple;
 
 import java.time.LocalTime;
-import unidade01.aula05.t05enumeration.e01enumsimple.Appointment.WeekDay;
+import aula5.t05enumeration.e01enumsimple.Appointment.WeekDay;
 /**
  *
  * @author Eldair

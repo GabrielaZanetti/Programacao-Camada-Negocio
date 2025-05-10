@@ -1,7 +1,7 @@
-package unidade01.aula05.t06static.e03staticblock;
+package aula5.t06static.e03staticblock;
 
 /**
- * @author Eldair F. Dornelles
+ * @author gabriela.zanetti
  */
 public class Account {
 

@@ -1,4 +1,4 @@
-package unidade01.aula05.t05enumeration.e02enhancedenum;
+package aula5.t05enumeration.e03enumwithabstractmethod;
 
 import java.time.LocalTime;
 
@@ -18,6 +18,9 @@ public class Planner {
         System.out.println("Monday: "+ WeekDay.MONDAY);
         System.out.println("Monday: "+ WeekDay.MONDAY.getValue());
         System.out.println("Monday: "+ WeekDay.MONDAY.getShortCode());
+        System.out.println("Monday message: "+ WeekDay.MONDAY.getMessage());
+        
+        System.out.println(appoint01.getWeekDay()+": "+ appoint01.getWeekDay().getMessage());
         
     }
 

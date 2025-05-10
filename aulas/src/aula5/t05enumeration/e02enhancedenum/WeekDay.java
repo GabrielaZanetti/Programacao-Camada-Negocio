@@ -1,5 +1,5 @@
 
-package unidade01.aula05.t05enumeration.e02enhancedenum;
+package aula5.t05enumeration.e02enhancedenum;
 
 /**
  *
