@@ -1,0 +1,4 @@
+url=jdbc:derby://localhost:1527/siscom
+user=app
+password=app
+useSSL=false
