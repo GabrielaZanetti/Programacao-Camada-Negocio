@@ -1,5 +1,6 @@
 package aula10.app.clients.model;
 
+import aula10.app.clients.exceptions.ClientValidationException;
 import aula10.app.clients.validator.ClienteValidator;
 
 /**
@@ -48,7 +49,7 @@ public class Client {
         return email;
     }
 
-    public void setNome(String nome) {
+    public void setNome(String nome) throws ClientValidationException {
         ClienteValidator.nomeValidator(nome);
         this.nome = nome;
     }

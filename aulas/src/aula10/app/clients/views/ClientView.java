@@ -4,6 +4,8 @@
  */
 package aula10.app.clients.views;
 
+import aula10.app.clients.controller.ClientController;
+
 /**
  *
  * @author gabriela.zanetti
@@ -156,11 +158,8 @@ public class ClientView extends javax.swing.JFrame {
         String phone = txt_telefone.getText();
         String email = txt_email.getText();
         
-        System.out.println("nome: "+ name);
-        System.out.println("address: "+ address);
-        System.out.println("phone: "+ phone);
-        System.out.println("email: "+ email);
-        
+        ClientController clientController = new ClientController();
+        clientController.create(name, address, phone, email);
     }//GEN-LAST:event_btn_saveActionPerformed
     /**
      * @param args the command line arguments
