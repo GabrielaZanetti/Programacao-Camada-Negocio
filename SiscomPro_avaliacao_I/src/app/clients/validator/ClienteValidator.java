@@ -13,4 +13,10 @@ public class ClienteValidator {
             throw new ClientValidationException("O nome nao foi informado");
         }
     }
+    
+    public static void cpfValidator(String cpf) throws ClientValidationException {
+        if (cpf.isEmpty()) {
+            throw new ClientValidationException("O cpf nao foi informado");
+        }
+    }
 }

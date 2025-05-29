@@ -7,21 +7,20 @@ import app.clients.validator.ClienteValidator;
  * @author gabriela.zanetti
  */
 public class Client {
-    private int code;
+    private int id;
     private String name;
     private String cpf;
     private String email;
     private String homePhone;
     private String cellPhone;
     private String address;
-    private int zipCode;
+    private String zipCode;
     private String addressNumber;
     private String neighborhood;
     private String city;
     private String uf;
 
-    public Client(int code, String name, String cpf, String email, String homePhone, String cellPhone, String address, int zipCode, String addressNumber, String neighborhood, String city, String uf) {
-        this.code = code;
+    public Client(String name, String cpf, String email, String homePhone, String cellPhone, String address, String zipCode, String addressNumber, String neighborhood, String city, String uf) {
         this.name = name;
         this.cpf = cpf;
         this.email = email;
@@ -35,7 +34,8 @@ public class Client {
         this.uf = uf;
     }
 
-    public Client(String name, String cpf, String email, String homePhone, String cellPhone, String address, int zipCode, String addressNumber, String neighborhood, String city, String uf) {
+    public Client(int id, String name, String cpf, String email, String homePhone, String cellPhone, String address, String zipCode, String addressNumber, String neighborhood, String city, String uf) {
+        this.id = id;
         this.name = name;
         this.cpf = cpf;
         this.email = email;
@@ -50,9 +50,13 @@ public class Client {
     }
 
     public int getId() {
-        return code;
+        return id;
     }
-            
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
@@ -66,7 +70,8 @@ public class Client {
         return cpf;
     }
 
-    public void setCpf(String cpf) {
+    public void setCpf(String cpf) throws ClientValidationException {
+        ClienteValidator.cpfValidator(cpf);
         this.cpf = cpf;
     }
 
@@ -102,11 +107,11 @@ public class Client {
         this.address = address;
     }
 
-    public int getZipCode() {
+    public String getZipCode() {
         return zipCode;
     }
 
-    public void setZipCode(int zipCode) {
+    public void setZipCode(String zipCode) {
         this.zipCode = zipCode;
     }
 
@@ -141,6 +146,4 @@ public class Client {
     public void setUf(String uf) {
         this.uf = uf;
     }
-
-
 }
