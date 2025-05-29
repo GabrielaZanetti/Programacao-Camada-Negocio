@@ -20,6 +20,9 @@ public class Client {
     private String city;
     private String uf;
 
+    public Client() {
+    }
+
     public Client(String name, String cpf, String email, String homePhone, String cellPhone, String address, String zipCode, String addressNumber, String neighborhood, String city, String uf) {
         this.name = name;
         this.cpf = cpf;
@@ -115,7 +118,7 @@ public class Client {
         this.zipCode = zipCode;
     }
 
-    public String getAddressNumber() {
+    public String getNumber() {
         return addressNumber;
     }
 

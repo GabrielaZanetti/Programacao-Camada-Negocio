@@ -1,13 +1,17 @@
 package app.clients.dao;
 
+import app.clients.exceptions.ClientValidationException;
 import app.clients.model.Client;
 import app.utils.db.ConnectionFactory;
 import app.utils.db.DBException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.sql.ResultSet;
 
 /**
  *
@@ -32,7 +36,7 @@ public class ClientDAO {
         stmt.setString(5, client.getCellPhone());
         stmt.setString(6, client.getAddress());
         stmt.setString(7, client.getZipCode());
-        stmt.setInt(8, client.getNumber());
+        stmt.setString(8, client.getNumber());
         stmt.setString(9, client.getNeighborhood());
         stmt.setString(10, client.getCity());
         stmt.setString(11, client.getUf());
@@ -56,7 +60,7 @@ public class ClientDAO {
             stmt.setString(5, client.getCellPhone());
             stmt.setString(6, client.getZipCode());
             stmt.setString(7, client.getAddress());
-            stmt.setInt(8, client.getNumber());
+            stmt.setString(8, client.getNumber());
             stmt.setString(9, client.getNeighborhood());
             stmt.setString(10, client.getCity());
             stmt.setString(11, client.getUf());
@@ -69,33 +73,76 @@ public class ClientDAO {
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    public boolean delet(int id) throws ClientValidationException {
+        String sql = "DELETE FROM TD_CLIENTES WHERE id = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            int affectedRows = stmt.executeUpdate();
+            return affectedRows > 0;
+        } catch (SQLException e) {
+            throw new ClientValidationException("Erro ao deletar cliente", e);
+        }
+    }
 
-    public void select(Client client){
+    public List<Client> select()throws DBException{
         // criar string sql
         String sql = "SELECT * FROM TD_CLIENTES VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         
-        consultaTabela(sql, client);
+        return consultaTabela(sql);
+    }
+
+    public List<Client> selectName(String name)throws ClientValidationException{
+        // criar string sql
+        String sql = "SELECT * FROM TD_CLIENTES WHERE name = ?";
+        
+        return consultaTabela(sql);
+    }
+
+    public Client selectId(int id)throws DBException, ClientValidationException, IllegalArgumentException{
+        // criar string sql
+        String sql = "SELECT * FROM TD_CLIENTES WHERE id = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Client client = new Client();
+                    client.setId(rs.getInt("id"));
+                    client.setName(rs.getString("name"));
+                    client.setCpf(rs.getString("cpf"));
+                    client.setEmail(rs.getString("email"));
+                    client.setHomePhone(rs.getString("home_phone"));
+                    client.setCellPhone(rs.getString("cell_phone"));
+                    return client;
+                } else {
+                    return null; // ou lançar exceção caso não encontre
+                }
+            }
+        } catch (SQLException e) {
+            throw new ClientValidationException("Erro ao buscar cliente por ID", e);
+        }
     }
     
-    public void consultaTabela(String sql, Client client) {
-        // criar o preparedStatement
-        try(PreparedStatement stmt = con.prepareStatement(sql)){
-            stmt.setString(1, client.getName());
-            stmt.setString(2, client.getCpf());
-            stmt.setString(3, client.getEmail());
-            stmt.setString(4, client.getHomePhone());
-            stmt.setString(5, client.getCellPhone());
-            stmt.setString(6, client.getAddress());
-            stmt.setString(7, client.getZipCode());
-            stmt.setInt(8, client.getNumber());
-            stmt.setString(9, client.getNeighborhood());
-            stmt.setString(10, client.getCity());
-            stmt.setString(11, client.getUf());
-            stmt.setString(12,client.getName());
+    public List<Client> consultaTabela(String sql) throws DBException {
+        List<Client> list = new ArrayList<>();
 
-            stmt.executeUpdate();
-        } catch (SQLException ex) {
-            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        try (PreparedStatement stmt = con.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Client client = new Client();
+                client.setId(rs.getInt("id"));
+                client.setName(rs.getString("name"));
+                client.setCpf(rs.getString("cpf"));
+                client.setEmail(rs.getString("email"));
+                client.setHomePhone(rs.getString("home_phone"));
+                client.setCellPhone(rs.getString("cell_phone"));
+                list.add(client);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar clientes", e);
         }
+
+        return list;
     }
 }

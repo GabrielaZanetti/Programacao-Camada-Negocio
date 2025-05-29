@@ -14,6 +14,10 @@ public class ClientValidationException extends Exception {
         date = new Date();
     }
     
+    public ClientValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
     public ClientValidationException(String ex) {
         super(ex);
         date = new Date();
