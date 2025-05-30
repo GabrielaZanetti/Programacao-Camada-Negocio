@@ -85,14 +85,14 @@ public class ClientDAO {
         }
     }
 
-    public List<Client> select()throws DBException{
+    public List<Client> select()throws DBException, ClientValidationException{
         // criar string sql
         String sql = "SELECT * FROM TD_CLIENTES VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         
         return consultaTabela(sql);
     }
 
-    public List<Client> selectName(String name)throws ClientValidationException{
+    public List<Client> selectName(String name)throws ClientValidationException, DBException{
         // criar string sql
         String sql = "SELECT * FROM TD_CLIENTES WHERE name = ?";
         
@@ -123,7 +123,7 @@ public class ClientDAO {
         }
     }
     
-    public List<Client> consultaTabela(String sql) throws DBException {
+    public List<Client> consultaTabela(String sql) throws DBException, ClientValidationException {
         List<Client> list = new ArrayList<>();
 
         try (PreparedStatement stmt = con.prepareStatement(sql);
