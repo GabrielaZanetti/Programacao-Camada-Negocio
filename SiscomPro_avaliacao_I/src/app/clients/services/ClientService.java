@@ -14,7 +14,7 @@ public class ClientService  {
     ClientDAO dao;
     
     public ClientService() throws DBException {
-        dao = new ClientDAO();
+        this.dao = new ClientDAO();
     }
     
     public void create(String name, String cpf, String email, String homePhone, String cellPhone, String address, String zipCode, String addressNumber, String neighborhood, String city, String uf) {
@@ -31,7 +31,7 @@ public class ClientService  {
         return dao.select();
     }
     
-    public List<Client> selectName(String name) throws ClientValidationException {
+    public List<Client> selectName(String name) throws ClientValidationException, DBException {
         return dao.selectName(name);
     }
     
@@ -40,6 +40,6 @@ public class ClientService  {
     }
     
     public boolean delet(int id) throws ClientValidationException {
-        return dao.delet(id);
+        return dao.delete(id);
     }
 }

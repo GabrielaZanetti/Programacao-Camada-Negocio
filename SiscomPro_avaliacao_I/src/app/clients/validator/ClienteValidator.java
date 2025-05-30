@@ -22,7 +22,7 @@ public class ClienteValidator {
     
     public static void idValidator(String id) throws ClientValidationException {
         if (id.isEmpty()) {
-            throw new ClientValidationException("O cpf nao foi informado");
+            throw new ClientValidationException("O id nao foi informado");
         }
     }
 }

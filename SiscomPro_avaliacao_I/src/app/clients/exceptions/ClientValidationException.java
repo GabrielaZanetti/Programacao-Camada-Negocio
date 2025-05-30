@@ -25,6 +25,6 @@ public class ClientValidationException extends Exception {
     
     @Override
     public String getMessage() {
-        return date.toString() + " " + super.getMessage();
+        return super.getMessage();
     }
 }

@@ -21,11 +21,18 @@ public class ClientDAO {
     Connection con;
     public ClientDAO () throws DBException {
         con = new ConnectionFactory().getConnection();
+        try {
+            if (con == null || con.isClosed()) {
+                throw new DBException("Falha ao estabelecer conexão com o banco de dados.");
+            }
+        } catch (SQLException e) {
+            throw new DBException("Erro ao validar conexão com o banco de dados.", e);
+        }
     }
     
     public void insert(Client client){
         // criar string sql
-        String sql = "INSERT INTO TD_CLIENTES(name, cpf, email, homePhone, cellPhone, address, zipCode, addressNumber, neighborhood, city, uf) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        String sql = "INSERT INTO APP.TB_CLIENTES (nome, cpf, email, telefone, celular, endereco, cep, numero, bairro, cidade, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
         
         // criar o preparedStatement
         try(PreparedStatement stmt = con.prepareStatement(sql)){
@@ -43,13 +50,14 @@ public class ClientDAO {
             
         stmt.executeUpdate();
         } catch (SQLException ex) {
+            System.out.println(ex);
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
     public void update(Client client) {
         // Comando SQL de atualização
-        String sql = "UPDATE TD_CLIENTES SET name = ?, cpf = ?, email = ?, homePhone = ?, cellPhone = ?, zipCode = ?, address = ?, addressNumber = ?, neighborhood = ?, city = ?, uf = ? WHERE id = ?";
+        String sql = "UPDATE APP.TB_CLIENTES SET nome = ?, cpf = ?, email = ?, telefone = ?, celular = ?, cep = ?, endereco = ?, numero = ?, bairro = ?, cidade = ?, estado = ? WHERE id = ?";
 
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             // Define os parâmetros do SET
@@ -70,74 +78,80 @@ public class ClientDAO {
 
             stmt.executeUpdate();
         } catch (SQLException ex) {
+            System.out.println(ex);
             Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    public boolean delet(int id) throws ClientValidationException {
-        String sql = "DELETE FROM TD_CLIENTES WHERE id = ?";
+    public boolean delete(int id) throws ClientValidationException {
+        String sql = "DELETE FROM APP.TB_CLIENTES WHERE id = ?";
         try (PreparedStatement stmt = con.prepareStatement(sql)) {
             stmt.setInt(1, id);
             int affectedRows = stmt.executeUpdate();
             return affectedRows > 0;
         } catch (SQLException e) {
+            System.out.println(e);
             throw new ClientValidationException("Erro ao deletar cliente", e);
         }
     }
 
-    public List<Client> select()throws DBException, ClientValidationException{
-        // criar string sql
-        String sql = "SELECT * FROM TD_CLIENTES VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-        
-        return consultaTabela(sql);
-    }
-
-    public List<Client> selectName(String name)throws ClientValidationException, DBException{
-        // criar string sql
-        String sql = "SELECT * FROM TD_CLIENTES WHERE name = ?";
-        
-        return consultaTabela(sql);
-    }
-
-    public Client selectId(int id)throws DBException, ClientValidationException, IllegalArgumentException{
-        // criar string sql
-        String sql = "SELECT * FROM TD_CLIENTES WHERE id = ?";
-        try (PreparedStatement stmt = con.prepareStatement(sql)) {
-            stmt.setInt(1, id);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    Client client = new Client();
-                    client.setId(rs.getInt("id"));
-                    client.setName(rs.getString("name"));
-                    client.setCpf(rs.getString("cpf"));
-                    client.setEmail(rs.getString("email"));
-                    client.setHomePhone(rs.getString("home_phone"));
-                    client.setCellPhone(rs.getString("cell_phone"));
-                    return client;
-                } else {
-                    return null; // ou lançar exceção caso não encontre
-                }
-            }
-        } catch (SQLException e) {
-            throw new ClientValidationException("Erro ao buscar cliente por ID", e);
-        }
-    }
-    
-    public List<Client> consultaTabela(String sql) throws DBException, ClientValidationException {
+    public List<Client> select() throws DBException {
+        String sql = "SELECT * FROM APP.TB_CLIENTES";
         List<Client> list = new ArrayList<>();
-
+ 
         try (PreparedStatement stmt = con.prepareStatement(sql);
-            ResultSet rs = stmt.executeQuery()) {
-
+             ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 Client client = new Client();
                 client.setId(rs.getInt("id"));
-                client.setName(rs.getString("name"));
+                client.setName(rs.getString("nome"));
                 client.setCpf(rs.getString("cpf"));
                 client.setEmail(rs.getString("email"));
-                client.setHomePhone(rs.getString("home_phone"));
-                client.setCellPhone(rs.getString("cell_phone"));
+                client.setHomePhone(rs.getString("telefone"));
+                client.setCellPhone(rs.getString("celular"));
+                client.setAddress(rs.getString("endereco"));
+                client.setZipCode(rs.getString("cep"));
+                client.setAddressNumber(rs.getString("numero"));
+                client.setNeighborhood(rs.getString("bairro"));
+                client.setCity(rs.getString("cidade"));
+                client.setUf(rs.getString("estado"));
+                
                 list.add(client);
+            }
+
+        } catch (SQLException e) {
+            throw new DBException("Erro ao buscar clientes no banco de dados", e);
+        } catch (ClientValidationException ex) {
+            Logger.getLogger(ClientDAO.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return list;
+    }
+
+    public List<Client> selectName(String name) throws ClientValidationException, DBException {
+        String sql = "SELECT * FROM APP.TB_CLIENTES WHERE LOWER(nome) LIKE ?";
+        List<Client> list = new ArrayList<>();
+
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setString(1, "%" + name.toLowerCase() + "%");
+
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Client client = new Client();
+                    client.setId(rs.getInt("id"));
+                    client.setName(rs.getString("nome"));
+                    client.setCpf(rs.getString("cpf"));
+                    client.setEmail(rs.getString("email"));
+                    client.setHomePhone(rs.getString("telefone"));
+                    client.setCellPhone(rs.getString("celular"));
+                    client.setAddress(rs.getString("endereco"));
+                    client.setZipCode(rs.getString("cep"));
+                    client.setAddressNumber(rs.getString("numero"));
+                    client.setNeighborhood(rs.getString("bairro"));
+                    client.setCity(rs.getString("cidade"));
+                    client.setUf(rs.getString("estado"));
+                    list.add(client);
+                }
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar clientes", e);
@@ -145,4 +159,37 @@ public class ClientDAO {
 
         return list;
     }
+
+
+    public Client selectId(int id)throws DBException, ClientValidationException, IllegalArgumentException{
+        // criar string sql
+        String sql = "SELECT * FROM APP.TB_CLIENTES WHERE id = ?";
+        try (PreparedStatement stmt = con.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    Client client = new Client();
+                    client.setId(rs.getInt("id"));
+                    client.setName(rs.getString("nome"));
+                    client.setCpf(rs.getString("cpf"));
+                    client.setEmail(rs.getString("email"));
+                    client.setHomePhone(rs.getString("telefone"));
+                    client.setCellPhone(rs.getString("celular"));
+                    client.setAddress(rs.getString("endereco"));
+                    client.setZipCode(rs.getString("cep"));
+                    client.setAddressNumber(rs.getString("numero"));
+                    client.setNeighborhood(rs.getString("bairro"));
+                    client.setCity(rs.getString("cidade"));
+                    client.setUf(rs.getString("estado"));
+                    return client;
+                } else {
+                    return null;
+                }
+            }
+        } catch (SQLException e) {
+            System.out.println(e);
+            throw new ClientValidationException("Erro ao buscar cliente por ID", e);
+        }
+    }
+
 }
