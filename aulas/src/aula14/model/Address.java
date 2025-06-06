@@ -1,4 +1,4 @@
-package unidade02.aula11.aula11_temp.model;
+package aula14.model;
 
 /**
  * @author Eldair F. Dornelles
