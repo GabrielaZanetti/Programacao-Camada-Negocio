@@ -3,15 +3,7 @@ package aula14;
 import aula14.model.Address;
 import aula14.model.Customer;
 import aula14.model.Phone;
-import java.io.ByteArrayOutputStream;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 
 /**
  *
@@ -19,7 +11,7 @@ import org.w3c.dom.Element;
  */
 public class XmlManipulation {
 
-    public static void main(String[] args) throws TransformerConfigurationException, TransformerException {
+    public static void main(String[] args) {
         Phone phone = new Phone("Residencial", "55999999999");
         Address address = new Address("Av. do Comercio", 23, "Centro", "Ijui", "RS", "98700000");
         Customer customer = new Customer(1, "Mariana", "mariana@gmail.com", phone, address);
@@ -28,16 +20,6 @@ public class XmlManipulation {
                 
         XmlHandler.customerToXmlDocument(xmlDoc, customer);
         
-        ByteArrayOutputStream outputString = new ByteArrayOutputStream();
-        StreamResult streamResult = new StreamResult(outputString);
-        
-        DOMSource domSource = new DOMSource(xmlDoc);
-        
-        TransformerFactory tf = TransformerFactory.newInstance();
-        Transformer transformer = tf.newTransformer();
-        
-        transformer.transform(domSource, streamResult);
-        System.out.println(outputString.toString());
+        XmlHandler.xmlDocToString(xmlDoc);
     }
-
 }

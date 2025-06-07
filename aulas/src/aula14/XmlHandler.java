@@ -1,9 +1,17 @@
 package aula14;
 
 import aula14.model.Customer;
+import java.io.ByteArrayOutputStream;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -67,5 +75,23 @@ public class XmlHandler {
         addressCity.setTextContent(customer.getAddress().getCity());
         addressState.setTextContent(customer.getAddress().getState());
         addressZipCode.setTextContent(customer.getAddress().getZipCode());
+    }
+
+    public static String xmlDocToString(Document xmlDoc) {
+        try {
+            ByteArrayOutputStream outputString = new ByteArrayOutputStream();
+            StreamResult streamResult = new StreamResult(outputString);
+            
+            DOMSource domSource = new DOMSource(xmlDoc);
+            
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            
+            transformer.transform(domSource, streamResult);
+            return outputString.toString();
+        } catch (TransformerException ex) {
+            System.out.println("Error: " + ex.getMessage());
+            return null;
+        }
     }
 }
