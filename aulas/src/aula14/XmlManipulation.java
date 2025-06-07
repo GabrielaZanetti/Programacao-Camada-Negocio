@@ -20,6 +20,10 @@ public class XmlManipulation {
                 
         XmlHandler.customerToXmlDocument(xmlDoc, customer);
         
-        XmlHandler.xmlDocToString(xmlDoc);
+       String xmlContent = XmlHandler.xmlDocToString(xmlDoc);
+//        System.out.println(xmlContent);
+
+       XmlHandler.xmlDocToFile(xmlDoc, "/src/aula14/xml_files");
+        
     }
 }

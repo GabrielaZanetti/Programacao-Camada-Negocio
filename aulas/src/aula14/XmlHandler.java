@@ -2,6 +2,7 @@ package aula14;
 
 import aula14.model.Customer;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
@@ -92,6 +93,21 @@ public class XmlHandler {
         } catch (TransformerException ex) {
             System.out.println("Error: " + ex.getMessage());
             return null;
+        }
+    }
+    
+    public static void xmlDocToFile(Document xmlDoc, String filePath) {
+        try {
+            File file = new File(filePath);
+            StreamResult streamResult = new StreamResult(file);
+            DOMSource domSource = new DOMSource(xmlDoc);
+            
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer();
+            transformer.setOutputProperty(OutputKey.Integer, 7);
+            transformer.transform(domSource, streamResult);
+        } catch (TransformerException ex) {
+            System.out.println("Error: " + ex.getMessage());
         }
     }
 }
