@@ -3,9 +3,13 @@ package aula14;
 import aula14.model.Address;
 import aula14.model.Customer;
 import aula14.model.Phone;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import java.io.ByteArrayOutputStream;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -15,57 +19,25 @@ import org.w3c.dom.Element;
  */
 public class XmlManipulation {
 
-    public static void main(String[] args) throws ParserConfigurationException {
+    public static void main(String[] args) throws TransformerConfigurationException, TransformerException {
         Phone phone = new Phone("Residencial", "55999999999");
         Address address = new Address("Av. do Comercio", 23, "Centro", "Ijui", "RS", "98700000");
         Customer customer = new Customer(1, "Mariana", "mariana@gmail.com", phone, address);
         
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        DocumentBuilder db = dbf.newDocumentBuilder();
-        Document xmlDoc = db.newDocument();
-        
-        Element customerElement = xmlDoc.createElement("costumer"); 
-        xmlDoc.appendChild(customerElement);
-        
-        Element idElement = xmlDoc.createElement("id");
-        Element nameElement = xmlDoc.createElement("name");
-        Element emailElement = xmlDoc.createElement("email");
-        Element phoneElement = xmlDoc.createElement("phone");
-        Element addressElement = xmlDoc.createElement("address");
+        Document xmlDoc = XmlHandler.createEmptyXmlDocument();
                 
-        customerElement.appendChild(idElement);
-        customerElement.appendChild(nameElement);
-        customerElement.appendChild(emailElement);
-        customerElement.appendChild(phoneElement);
-        customerElement.appendChild(addressElement);
+        XmlHandler.customerToXmlDocument(xmlDoc, customer);
         
-        Element addressStreet = xmlDoc.createElement("street");
-        Element addressNumber = xmlDoc.createElement("number");
-        Element addressDistrict = xmlDoc.createElement("district");
-        Element addressCity = xmlDoc.createElement("city");
-        Element addressState = xmlDoc.createElement("state");
-        Element addressZipCode = xmlDoc.createElement("zipCode");
+        ByteArrayOutputStream outputString = new ByteArrayOutputStream();
+        StreamResult streamResult = new StreamResult(outputString);
         
-        addressElement.appendChild(addressStreet);
-        addressElement.appendChild(addressNumber);
-        addressElement.appendChild(addressDistrict);
-        addressElement.appendChild(addressCity);
-        addressElement.appendChild(addressState);
-        addressElement.appendChild(addressZipCode);
+        DOMSource domSource = new DOMSource(xmlDoc);
         
-        phoneElement.setAttribute("type", customer.getPhone().getType());
-        phoneElement.setTextContent(customer.getPhone().getNumber());
+        TransformerFactory tf = TransformerFactory.newInstance();
+        Transformer transformer = tf.newTransformer();
         
-        idElement.setTextContent(customer.getId().toString());
-        nameElement.setTextContent(customer.getName());
-        emailElement.setTextContent(customer.getEmail());
-        
-        addressStreet.setTextContent(customer.getAddress().getStreet());
-        addressNumber.setTextContent(Integer.toString(customer.getAddress().getNumber()));
-        addressDistrict.setTextContent(customer.getAddress().getDistrict());
-        addressCity.setTextContent(customer.getAddress().getCity());
-        addressState.setTextContent(customer.getAddress().getState());
-        addressZipCode.setTextContent(customer.getAddress().getZipCode());
+        transformer.transform(domSource, streamResult);
+        System.out.println(outputString.toString());
     }
 
 }
