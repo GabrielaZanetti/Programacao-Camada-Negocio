@@ -26,19 +26,22 @@ public class XmlManipulation {
                 
         XmlHandler.customerToXmlDocument(xmlDoc, customer);
         
-//       String xmlContent = XmlHandler.xmlDocToString(xmlDoc);
-//        System.out.println(xmlContent);
+       String xmlContentStr = XmlHandler.xmlDocToString(xmlDoc);
+//        System.out.println(xmlContentStr);
 
         String filePath = "src/aula14/xml_files/customer.xml"; 
 //        XmlHandler.xmlDocToFile(xmlDoc, filePath);
         
         Document docXmlRead = XmlHandler.readXml(filePath);
-        System.out.println("Imprimir XML lido!");
-        System.out.println(XmlHandler.xmlDocToString(docXmlRead));
+//        System.out.println("Imprimir XML lido!");
+//        System.out.println(XmlHandler.xmlDocToString(docXmlRead));
         
+        Document xmlD = XmlHandler.xmlToString(xmlContentStr);
+//        System.out.println(XmlHandler.xmlDocToString(xmlDoc)); doc para string e imprime
+
         NodeList nodeList = docXmlRead.getElementsByTagName("customer");
         int size = nodeList.getLength();
-        System.out.println("Tamanho: " + size);
+//        System.out.println("Tamanho: " + size);
         
         Node node = nodeList.item(0);
         if (node.getNodeType() == Node.ELEMENT_NODE) {
@@ -51,6 +54,5 @@ public class XmlManipulation {
             Node iphoneNode = customerElement.getElementsByTagName("phone").item(0);
             System.out.println(iphoneNode.getAttributes().item(0).getNodeValue());
         }
-        
     }
 }
