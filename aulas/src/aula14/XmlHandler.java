@@ -3,6 +3,9 @@ package aula14;
 import aula14.model.Customer;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -14,6 +17,7 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.xml.sax.SAXException;
 
 /**
  *
@@ -104,6 +108,17 @@ public class XmlHandler {
             transformer.transform(domSource, streamResult);
         } catch (TransformerException ex) {
             System.out.println("erro: " + ex.getMessage());
+        }
+    }
+
+    public static Document readXml(String filePath) {
+        try {
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            return db.parse(filePath);
+        } catch (IOException | SAXException|ParserConfigurationException ex) {
+            Logger.getLogger(XmlHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
         }
     }
 }
