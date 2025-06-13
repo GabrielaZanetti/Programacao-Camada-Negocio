@@ -23,7 +23,8 @@ public class XmlManipulation {
        String xmlContent = XmlHandler.xmlDocToString(xmlDoc);
 //        System.out.println(xmlContent);
 
-       XmlHandler.xmlDocToFile(xmlDoc, "/src/aula14/xml_files");
+        String filePath = "src/aula14/xml_files/customer.xml"; 
+        XmlHandler.xmlDocToFile(xmlDoc, filePath);
         
     }
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<customer>
+    <id>1</id>
+    <name>Mariana</name>
+    <email>mariana@gmail.com</email>
+    <phone type="Residencial">55999999999</phone>
+    <address>
+        <street>Av. do Comercio</street>
+        <number>23</number>
+        <district>Centro</district>
+        <city>Ijui</city>
+        <state>RS</state>
+        <zipcode>98700000</zipcode>
+    </address>
+</customer>
