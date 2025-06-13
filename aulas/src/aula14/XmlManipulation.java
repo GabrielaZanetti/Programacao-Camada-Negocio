@@ -51,5 +51,6 @@ public class XmlManipulation {
             Node iphoneNode = customerElement.getElementsByTagName("phone").item(0);
             System.out.println(iphoneNode.getAttributes().item(0).getNodeValue());
         }
+        
     }
 }

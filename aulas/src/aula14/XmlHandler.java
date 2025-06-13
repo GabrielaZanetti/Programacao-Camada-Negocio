@@ -1,6 +1,7 @@
 package aula14;
 
 import aula14.model.Customer;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
@@ -122,5 +123,15 @@ public class XmlHandler {
         }
     }
     
-    
+    public static Document xmlToString(String strAux) {
+        try {
+            ByteArrayInputStream inputStream = new ByteArrayInputStream(strAux.getBytes());
+            DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+            DocumentBuilder db = dbf.newDocumentBuilder();
+            return db.parse(inputStream);
+        } catch (IOException | SAXException | ParserConfigurationException ex) {
+            Logger.getLogger(XmlHandler.class.getName()).log(Level.SEVERE, null, ex);
+            return null;
+        }
+    }
 }
