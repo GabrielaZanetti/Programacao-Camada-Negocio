@@ -1,4 +1,4 @@
-package aula14.model;
+package aula14_15.model;
 
 /**
  * @author Eldair F. Dornelles
