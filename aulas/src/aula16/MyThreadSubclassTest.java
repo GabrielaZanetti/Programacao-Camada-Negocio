@@ -20,17 +20,18 @@ class MyThreadSubClass extends Thread {
         System.out.println("Executado a thread: " + Thread.currentThread().getName());
         
         for (int i = 0; i < 10; i++) {
-            
-            try {
-                System.out.println(threadName + " " + i);
-                // aguardo no start das thread
-                Thread.sleep(timeToSlep);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(MyThreadSubClass.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            
+            System.out.println(threadName + " " + i);
+
+            sleep();
         }
-        
+    }
+    
+    public void sleep() {
+        try {
+            Thread.sleep(timeToSlep);
+        } catch (InterruptedException ex) {
+            Logger.getLogger(MyThreadSubClass.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
 
